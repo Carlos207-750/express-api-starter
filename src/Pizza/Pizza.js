@@ -1,5 +1,5 @@
 // entities/Pizza.js
-const db = require('../config/database');
+const db = require('./database');
 
 class Pizza {
     static create({ name, imageUrl, price }) {

@@ -1,7 +1,7 @@
 // routes/router.js
 const express = require('express');
-const pizzaRouter = require('../Pizza/routes/pizza');
-const ingredientRouter = require('../Ingredient/routes/ingredient');
+const pizzaRouter = require('../Pizza/pizzaRoute');
+const ingredientRouter = require('../Ingredient/ingredientRoute');
 
 const router = express.Router();
 

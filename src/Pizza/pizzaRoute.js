@@ -1,20 +1,20 @@
-// routes/pizza.js
+// routes/pizzaRoute.js
 const express = require('express');
 const { body, param } = require('express-validator');
-const ingredientController = require('../controllers/ingredientController');
+const pizzaController = require('./pizzaController');
 
 const router = express.Router();
 
 /**
  * @openapi
- * /api/ingredients:
+ * /api/pizzas:
  *   get:
- *     summary: Retrieve a list of ingredients
+ *     summary: Retrieve a list of pizzas
  *     responses:
  *       200:
- *         description: A list of ingredients
+ *         description: A list of pizzas
  *   post:
- *     summary: Create a new ingredient
+ *     summary: Create a new pizza
  *     requestBody:
  *       required: true
  *       content:
@@ -27,20 +27,22 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *               imageUrl:
+ *                 type: string
  *               price:
  *                 type: number
  *     responses:
  *       201:
- *         description: Ingredient created
+ *         description: Pizza created
  *       400:
  *         description: Invalid input
  */
 
 /**
  * @openapi
- * /api/ingredients/{id}:
+ * /api/pizzas/{id}:
  *   get:
- *     summary: Get an ingredient by ID
+ *     summary: Get a pizza by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -49,11 +51,11 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       200:
- *         description: A single ingredient
+ *         description: A single pizza
  *       404:
- *         description: Ingredient not found
+ *         description: Pizza not found
  *   put:
- *     summary: Update an ingredient by ID
+ *     summary: Update a pizza by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -69,17 +71,19 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *               imageUrl:
+ *                 type: string
  *               price:
  *                 type: number
  *     responses:
  *       200:
- *         description: Ingredient updated
+ *         description: Pizza updated
  *       400:
  *         description: Invalid input
  *       404:
- *         description: Ingredient not found
+ *         description: Pizza not found
  *   delete:
- *     summary: Delete an ingredient by ID
+ *     summary: Delete a pizza by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -88,9 +92,9 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       204:
- *         description: Ingredient deleted
+ *         description: Pizza deleted
  *       404:
- *         description: Ingredient not found
+ *         description: Pizza not found
  */
 
 /**
@@ -98,13 +102,14 @@ const router = express.Router();
  */
 const createAndUpdateValidations = [
     body('name').isString().notEmpty().withMessage('name is required'),
+    body('imageUrl').optional().isString().isURL().withMessage('imageUrl must be a valid URL'),
     body('price').isFloat({ gt: 0 }).withMessage('price must be a positive number'),
 ];
 
-router.get('/', ingredientController.findAll);
-router.post('/', createAndUpdateValidations, ingredientController.create);
-router.get('/:id', [param('id').isInt().withMessage('id must be an integer')], ingredientController.findOne);
-router.put('/:id', [param('id').isInt().withMessage('id must be an integer'), ...createAndUpdateValidations], ingredientController.update);
-router.delete('/:id', [param('id').isInt().withMessage('id must be an integer')], ingredientController.delete);
+router.get('/', pizzaController.findAll);
+router.post('/', createAndUpdateValidations, pizzaController.create);
+router.get('/:id', [param('id').isInt().withMessage('id must be an integer')], pizzaController.findOne);
+router.put('/:id', [param('id').isInt().withMessage('id must be an integer'), ...createAndUpdateValidations], pizzaController.update);
+router.delete('/:id', [param('id').isInt().withMessage('id must be an integer')], pizzaController.delete);
 
 module.exports = router;
